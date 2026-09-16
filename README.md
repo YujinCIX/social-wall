@@ -4,6 +4,8 @@ A simple full-stack social wall application built with **Java, Spring Boot, Post
 
 The application allows users to create accounts, authenticate, publish posts with optional images, view the public wall and manage their personal wall.
 
+![Social Wall preview](screenshots/preview.png)
+
 ---
 
 ## Features
