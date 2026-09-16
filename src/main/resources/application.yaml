@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: social-wall
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/postgresql
+    username: postgres
+    password: 111429
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false

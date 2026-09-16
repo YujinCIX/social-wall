@@ -1,0 +1,11 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+* text=auto
+*.java text diff
+*.html text diff
+*.css text diff
+*.js text diff
+*.properties text diff
+*.yml text diff
+*.yaml text diff
+*.md text diff
