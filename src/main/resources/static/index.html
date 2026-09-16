@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Wall</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar-content">
+    <a class="logo" href="/index.html">Social Wall</a>
+
+    <nav>
+      <a href="/index.html">Public wall</a>
+      <a href="/my-wall.html">My wall</a>
+      <button id="logout-button" class="button-secondary">
+        Log out
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main class="page-container">
+
+  <section class="welcome-section">
+    <h1>Public wall</h1>
+    <p>Posts from all users.</p>
+  </section>
+
+  <section class="create-post-card">
+    <h2>Create post</h2>
+
+    <form id="post-form">
+
+            <textarea
+                    id="post-content"
+                    name="content"
+                    rows="4"
+                    maxlength="5000"
+                    placeholder="What's on your mind?"
+            ></textarea>
+
+      <label for="post-image" class="file-label">
+        Add image
+      </label>
+
+      <input
+              id="post-image"
+              name="image"
+              type="file"
+              accept="image/jpeg,image/png,image/gif,image/webp"
+      >
+
+      <p class="file-hint">
+        Optional. JPEG, PNG, GIF or WebP. Maximum 5 MB.
+      </p>
+
+      <button type="submit">
+        Publish
+      </button>
+
+    </form>
+
+    <p id="post-message" class="message"></p>
+  </section>
+
+  <section>
+    <div id="posts-container" class="posts-container"></div>
+  </section>
+
+</main>
+
+<script src="/js/posts.js"></script>
+</body>
+</html>
