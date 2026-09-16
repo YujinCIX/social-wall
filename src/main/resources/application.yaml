@@ -3,9 +3,9 @@ spring:
     name: social-wall
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgresql
-    username: postgres
-    password: 111429
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
