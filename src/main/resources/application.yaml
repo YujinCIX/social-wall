@@ -3,12 +3,21 @@ spring:
     name: social-wall
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgresql
-    username: postgres
-    password: 111429
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: update
     open-in-view: false
     show-sql: false
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
+app:
+  uploads:
+    directory: uploads
