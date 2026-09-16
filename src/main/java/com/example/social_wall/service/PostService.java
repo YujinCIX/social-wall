@@ -7,6 +7,7 @@ import com.example.social_wall.repository.PostRepository;
 import com.example.social_wall.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -87,6 +88,7 @@ public class PostService {
         return PostResponse.from(postRepository.save(post));
     }
 
+    @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc()
                 .stream()
@@ -94,6 +96,7 @@ public class PostService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<PostResponse> getMyPosts(String username) {
 
         User author = userRepository.findByUsername(username)
