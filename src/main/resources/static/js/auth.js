@@ -1,35 +1,36 @@
 const registerForm =
-    document.getElementById("register-form");
+    document.getElementById(
+        "register-form"
+    );
 
 const loginForm =
-    document.getElementById("login-form");
+    document.getElementById(
+        "login-form"
+    );
 
 const messageElement =
-    document.getElementById("message");
+    document.getElementById(
+        "message"
+    );
 
-document.addEventListener(
-    "localizationReady",
+window.localizationReady.then(
     () => {
-        setupAuthForms();
+
+        if (registerForm) {
+            registerForm.addEventListener(
+                "submit",
+                register
+            );
+        }
+
+        if (loginForm) {
+            loginForm.addEventListener(
+                "submit",
+                login
+            );
+        }
     }
 );
-
-function setupAuthForms() {
-
-    if (registerForm) {
-        registerForm.addEventListener(
-            "submit",
-            register
-        );
-    }
-
-    if (loginForm) {
-        loginForm.addEventListener(
-            "submit",
-            login
-        );
-    }
-}
 
 async function register(event) {
 
@@ -61,6 +62,7 @@ async function register(event) {
                 "/api/auth/register",
                 {
                     method: "POST",
+                    credentials: "same-origin",
                     headers:
                         getLocalizedFetchHeaders({
                             "Content-Type":
@@ -94,15 +96,23 @@ async function register(event) {
             false
         );
 
-        setTimeout(() => {
-            window.location.href =
-                "/login.html";
-        }, 800);
+        setTimeout(
+            () => {
+                window.location.replace(
+                    "/login.html"
+                );
+            },
+            800
+        );
 
     } catch (error) {
 
+        console.error(error);
+
         showMessage(
-            getTranslation("error.server"),
+            getTranslation(
+                "error.server"
+            ),
             true
         );
     }
@@ -132,6 +142,7 @@ async function login(event) {
                 "/api/auth/login",
                 {
                     method: "POST",
+                    credentials: "same-origin",
                     headers:
                         getLocalizedFetchHeaders({
                             "Content-Type":
@@ -157,13 +168,18 @@ async function login(event) {
             return;
         }
 
-        window.location.href =
-            "/index.html";
+        window.location.replace(
+            "/index.html"
+        );
 
     } catch (error) {
 
+        console.error(error);
+
         showMessage(
-            getTranslation("error.server"),
+            getTranslation(
+                "error.server"
+            ),
             true
         );
     }
@@ -210,9 +226,14 @@ function getErrorMessage(data) {
     const firstError =
         Object.values(data)[0];
 
-    return firstError
-        ? translateBackendMessage(firstError)
-        : getTranslation(
-            "error.requestFailed"
+    if (firstError) {
+
+        return translateBackendMessage(
+            firstError
         );
+    }
+
+    return getTranslation(
+        "error.requestFailed"
+    );
 }

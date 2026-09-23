@@ -2,115 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Social Wall — Register</title>
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
+  <title>Social Wall — My Wall</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<div class="auth-container">
+<header class="navbar">
 
-  <div class="auth-card">
+  <div class="navbar-content">
 
-    <div class="auth-header">
+    <a
+            class="logo"
+            href="/index.html"
+    >
+      Social Wall
+    </a>
 
-      <h1>Social Wall</h1>
+    <nav>
+
+      <a
+              href="/index.html"
+              data-i18n="navigation.publicWall"
+      >
+        Public wall
+      </a>
+
+      <a
+              href="/my-wall.html"
+              data-i18n="navigation.myWall"
+      >
+        My wall
+      </a>
 
       <div
               id="language-switcher"
               class="language-switcher"
       ></div>
 
-    </div>
-
-    <h2 data-i18n="auth.registerTitle">
-      Create account
-    </h2>
-
-    <form id="register-form">
-
-      <label
-              for="username"
-              data-i18n="auth.username"
-      >
-        Username
-      </label>
-
-      <input
-              id="username"
-              name="username"
-              type="text"
-              minlength="3"
-              maxlength="50"
-              required
-      >
-
-      <label
-              for="email"
-              data-i18n="auth.email"
-      >
-        Email
-      </label>
-
-      <input
-              id="email"
-              name="email"
-              type="email"
-              maxlength="255"
-              required
-      >
-
-      <label
-              for="password"
-              data-i18n="auth.password"
-      >
-        Password
-      </label>
-
-      <input
-              id="password"
-              name="password"
-              type="password"
-              minlength="8"
-              maxlength="100"
-              required
-      >
-
       <button
-              type="submit"
-              data-i18n="auth.register"
+              id="logout-button"
+              class="button-secondary"
+              data-i18n="navigation.logout"
       >
-        Register
+        Log out
       </button>
 
-    </form>
-
-    <p
-            id="message"
-            class="message"
-    ></p>
-
-    <p class="auth-link">
-
-            <span data-i18n="auth.hasAccount">
-                Already have an account?
-            </span>
-
-      <a
-              href="/login.html"
-              data-i18n="auth.loginLink"
-      >
-        Log in
-      </a>
-
-    </p>
+    </nav>
 
   </div>
 
-</div>
+</header>
+
+<main class="page-container">
+
+  <section class="welcome-section">
+
+    <h1 data-i18n="myWall.title">
+      My wall
+    </h1>
+
+    <p data-i18n="myWall.description">
+      Your published posts.
+    </p>
+
+  </section>
+
+  <section>
+
+    <div
+            id="posts-container"
+            class="posts-container"
+    ></div>
+
+  </section>
+
+</main>
 
 <script src="/js/localization.js"></script>
-<script src="/js/auth.js"></script>
+<script src="/js/posts.js"></script>
 
 </body>
 </html>

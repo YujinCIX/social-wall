@@ -22,39 +22,36 @@ const isMyWall =
     window.location.pathname ===
     "/my-wall.html";
 
-document.addEventListener(
-    "localizationReady",
+window.localizationReady.then(
     () => {
+
         loadPosts();
-        setupPostActions();
+
+        if (logoutButton) {
+            logoutButton.addEventListener(
+                "click",
+                logout
+            );
+        }
+
+        if (postForm) {
+            postForm.addEventListener(
+                "submit",
+                createPost
+            );
+        }
     }
 );
 
 document.addEventListener(
     "localeChanged",
     () => {
-        loadPosts();
+
+        if (postsContainer) {
+            loadPosts();
+        }
     }
 );
-
-function setupPostActions() {
-
-    if (logoutButton) {
-
-        logoutButton.addEventListener(
-            "click",
-            logout
-        );
-    }
-
-    if (postForm) {
-
-        postForm.addEventListener(
-            "submit",
-            createPost
-        );
-    }
-}
 
 async function loadPosts() {
 
@@ -69,6 +66,8 @@ async function loadPosts() {
             await fetch(
                 endpoint,
                 {
+                    method: "GET",
+                    credentials: "same-origin",
                     headers:
                         getLocalizedFetchHeaders()
                 }
@@ -76,8 +75,9 @@ async function loadPosts() {
 
         if (response.status === 401) {
 
-            window.location.href =
-                "/login.html";
+            window.location.replace(
+                "/login.html"
+            );
 
             return;
         }
@@ -85,7 +85,7 @@ async function loadPosts() {
         if (!response.ok) {
 
             throw new Error(
-                "Failed to load posts"
+                `Failed to load posts: ${response.status}`
             );
         }
 
@@ -96,26 +96,34 @@ async function loadPosts() {
 
     } catch (error) {
 
-        if (postsContainer) {
+        console.error(
+            "Failed to load posts.",
+            error
+        );
 
-            postsContainer.innerHTML =
-                "";
-
-            const message =
-                document.createElement("p");
-
-            message.className =
-                "error-message";
-
-            message.textContent =
-                getTranslation(
-                    "error.loadPosts"
-                );
-
-            postsContainer.appendChild(
-                message
-            );
+        if (!postsContainer) {
+            return;
         }
+
+        postsContainer.innerHTML =
+            "";
+
+        const message =
+            document.createElement(
+                "p"
+            );
+
+        message.className =
+            "error-message";
+
+        message.textContent =
+            getTranslation(
+                "error.loadPosts"
+            );
+
+        postsContainer.appendChild(
+            message
+        );
     }
 }
 
@@ -125,13 +133,17 @@ async function createPost(event) {
 
     const content =
         document
-            .getElementById("post-content")
+            .getElementById(
+                "post-content"
+            )
             .value
             .trim();
 
     const image =
         document
-            .getElementById("post-image")
+            .getElementById(
+                "post-image"
+            )
             .files[0];
 
     if (!content && !image) {
@@ -166,7 +178,6 @@ async function createPost(event) {
         new FormData();
 
     if (content) {
-
         formData.append(
             "content",
             content
@@ -174,17 +185,13 @@ async function createPost(event) {
     }
 
     if (image) {
-
         formData.append(
             "image",
             image
         );
     }
 
-    showPostMessage(
-        "",
-        false
-    );
+    showPostMessage("", false);
 
     try {
 
@@ -193,22 +200,24 @@ async function createPost(event) {
                 "/api/posts",
                 {
                     method: "POST",
+                    credentials: "same-origin",
                     headers:
                         getLocalizedFetchHeaders(),
                     body: formData
                 }
             );
 
-        const data =
-            await response.json();
-
         if (response.status === 401) {
 
-            window.location.href =
-                "/login.html";
+            window.location.replace(
+                "/login.html"
+            );
 
             return;
         }
+
+        const data =
+            await response.json();
 
         if (!response.ok) {
 
@@ -239,6 +248,8 @@ async function createPost(event) {
 
     } catch (error) {
 
+        console.error(error);
+
         showPostMessage(
             getTranslation(
                 "error.server"
@@ -250,6 +261,12 @@ async function createPost(event) {
 
 async function logout() {
 
+    if (!logoutButton) {
+        return;
+    }
+
+    logoutButton.disabled = true;
+
     try {
 
         const response =
@@ -257,6 +274,7 @@ async function logout() {
                 "/api/auth/logout",
                 {
                     method: "POST",
+                    credentials: "same-origin",
                     headers:
                         getLocalizedFetchHeaders()
                 }
@@ -264,17 +282,36 @@ async function logout() {
 
         if (
             response.ok ||
-            response.status === 204
+            response.status === 204 ||
+            response.status === 401
         ) {
 
-            window.location.href =
-                "/login.html";
+            window.location.replace(
+                "/login.html"
+            );
+
+            return;
         }
+
+        console.error(
+            "Logout failed:",
+            response.status
+        );
+
+        window.location.replace(
+            "/login.html"
+        );
 
     } catch (error) {
 
-        window.location.href =
-            "/login.html";
+        console.error(
+            "Logout request failed.",
+            error
+        );
+
+        window.location.replace(
+            "/login.html"
+        );
     }
 }
 
@@ -290,7 +327,9 @@ function renderPosts(posts) {
     if (posts.length === 0) {
 
         const message =
-            document.createElement("p");
+            document.createElement(
+                "p"
+            );
 
         message.className =
             "empty-message";
@@ -416,11 +455,8 @@ function formatDate(dateString) {
     const date =
         new Date(dateString);
 
-    const locale =
-        getLocaleCode();
-
     return new Intl.DateTimeFormat(
-        locale,
+        getLocaleCode(),
         {
             day: "2-digit",
             month: "2-digit",
@@ -428,7 +464,8 @@ function formatDate(dateString) {
             hour: "2-digit",
             minute: "2-digit",
             hour12:
-                currentLocale === "en"
+                getLocaleCode() ===
+                "en-US"
         }
     ).format(date);
 }

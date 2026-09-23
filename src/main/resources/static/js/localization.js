@@ -1,106 +1,82 @@
+const SUPPORTED_LOCALES = ["en", "ru"];
+const DEFAULT_LOCALE = "en";
+const LOCALE_STORAGE_KEY = "social-wall-locale";
+
+let currentLocale = DEFAULT_LOCALE;
 let translations = {};
-let currentLocale = "en";
 
-const supportedLocales = ["en", "ru"];
-
-document.addEventListener("DOMContentLoaded", async () => {
-    await initializeLocalization();
-});
+window.localizationReady =
+    initializeLocalization();
 
 async function initializeLocalization() {
 
     const savedLocale =
-        localStorage.getItem("locale");
+        localStorage.getItem(
+            LOCALE_STORAGE_KEY
+        );
 
     const browserLocale =
         navigator.language
             .toLowerCase()
             .startsWith("ru")
             ? "ru"
-            : "en";
+            : DEFAULT_LOCALE;
 
     currentLocale =
-        supportedLocales.includes(savedLocale)
+        SUPPORTED_LOCALES.includes(savedLocale)
             ? savedLocale
             : browserLocale;
 
-    await loadTranslations(currentLocale);
+    try {
+
+        await loadTranslations(
+            currentLocale
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load selected language.",
+            error
+        );
+
+        currentLocale =
+            DEFAULT_LOCALE;
+
+        await loadTranslations(
+            DEFAULT_LOCALE
+        );
+    }
+
+    document.documentElement.lang =
+        currentLocale;
 
     applyTranslations();
     createLanguageSwitcher();
 
-    document.dispatchEvent(
-        new CustomEvent("localizationReady")
-    );
+    return true;
 }
 
 async function loadTranslations(locale) {
 
     const response =
-        await fetch(`/locales/${locale}.json`);
+        await fetch(
+            `/locales/${locale}.json`,
+            {
+                cache: "no-store",
+                credentials: "same-origin"
+            }
+        );
 
     if (!response.ok) {
+
         throw new Error(
-            `Failed to load ${locale} translations`
+            `Failed to load translations: ${locale}`
         );
     }
 
     translations =
         await response.json();
-}
-
-function applyTranslations() {
-
-    document
-        .querySelectorAll("[data-i18n]")
-        .forEach(element => {
-
-            const key =
-                element.dataset.i18n;
-
-            const translation =
-                getTranslation(key);
-
-            if (translation) {
-                element.textContent =
-                    translation;
-            }
-        });
-
-    document
-        .querySelectorAll("[data-i18n-placeholder]")
-        .forEach(element => {
-
-            const key =
-                element.dataset.i18nPlaceholder;
-
-            const translation =
-                getTranslation(key);
-
-            if (translation) {
-                element.placeholder =
-                    translation;
-            }
-        });
-
-    document
-        .querySelectorAll("[data-i18n-title]")
-        .forEach(element => {
-
-            const key =
-                element.dataset.i18nTitle;
-
-            const translation =
-                getTranslation(key);
-
-            if (translation) {
-                element.title =
-                    translation;
-            }
-        });
-
-    document.documentElement.lang =
-        currentLocale;
 }
 
 function getTranslation(key) {
@@ -114,9 +90,183 @@ function getTranslation(key) {
         );
 }
 
+function applyTranslations() {
+
+    document
+        .querySelectorAll("[data-i18n]")
+        .forEach(element => {
+
+            const translation =
+                getTranslation(
+                    element.dataset.i18n
+                );
+
+            if (translation !== undefined) {
+                element.textContent =
+                    translation;
+            }
+        });
+
+    document
+        .querySelectorAll(
+            "[data-i18n-placeholder]"
+        )
+        .forEach(element => {
+
+            const translation =
+                getTranslation(
+                    element.dataset
+                        .i18nPlaceholder
+                );
+
+            if (translation !== undefined) {
+                element.placeholder =
+                    translation;
+            }
+        });
+
+    document.documentElement.lang =
+        currentLocale;
+}
+
+function getLocaleCode() {
+
+    return currentLocale === "ru"
+        ? "ru-RU"
+        : "en-US";
+}
+
+function getLocalizedFetchHeaders(
+    headers = {}
+) {
+
+    return {
+        "Accept-Language":
+            getLocaleCode(),
+        ...headers
+    };
+}
+
+async function setLocale(locale) {
+
+    if (
+        !SUPPORTED_LOCALES.includes(
+            locale
+        )
+    ) {
+        return;
+    }
+
+    if (locale === currentLocale) {
+        return;
+    }
+
+    try {
+
+        await loadTranslations(locale);
+
+        currentLocale =
+            locale;
+
+        localStorage.setItem(
+            LOCALE_STORAGE_KEY,
+            locale
+        );
+
+        document.documentElement.lang =
+            currentLocale;
+
+        applyTranslations();
+        createLanguageSwitcher();
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "localeChanged"
+            )
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Failed to change language.",
+            error
+        );
+    }
+}
+
+function createLanguageSwitcher() {
+
+    const switcher =
+        document.getElementById(
+            "language-switcher"
+        );
+
+    if (!switcher) {
+        return;
+    }
+
+    switcher.innerHTML = "";
+
+    const englishButton =
+        createLanguageButton(
+            "EN",
+            "en"
+        );
+
+    const russianButton =
+        createLanguageButton(
+            "RU",
+            "ru"
+        );
+
+    switcher.appendChild(
+        englishButton
+    );
+
+    switcher.appendChild(
+        russianButton
+    );
+}
+
+function createLanguageButton(
+    text,
+    locale
+) {
+
+    const button =
+        document.createElement(
+            "button"
+        );
+
+    button.type = "button";
+
+    button.className =
+        "language-button";
+
+    button.textContent =
+        text;
+
+    if (
+        locale === currentLocale
+    ) {
+
+        button.classList.add(
+            "active"
+        );
+    }
+
+    button.addEventListener(
+        "click",
+        () => setLocale(locale)
+    );
+
+    return button;
+}
+
 function translateBackendMessage(message) {
 
     const messages = {
+
         "Username is required":
             "error.usernameRequired",
 
@@ -180,7 +330,7 @@ function translateBackendMessage(message) {
         "Post must contain text or an image":
             "error.postContent",
 
-        "Пост должен содержать текст или изображение":
+        "Публикация должна содержать текст или изображение":
             "error.postContent",
 
         "Image size must not exceed 5 MB":
@@ -220,102 +370,4 @@ function translateBackendMessage(message) {
     return key
         ? getTranslation(key)
         : message;
-}
-
-function getLocaleCode() {
-    return currentLocale === "ru"
-        ? "ru-RU"
-        : "en-US";
-}
-
-function getLocalizedFetchHeaders(
-    headers = {}
-) {
-    return {
-        "Accept-Language": getLocaleCode(),
-        ...headers
-    };
-}
-
-async function setLocale(locale) {
-
-    if (!supportedLocales.includes(locale)) {
-        return;
-    }
-
-    currentLocale = locale;
-
-    localStorage.setItem(
-        "locale",
-        locale
-    );
-
-    await loadTranslations(locale);
-
-    applyTranslations();
-    createLanguageSwitcher();
-
-    document.dispatchEvent(
-        new CustomEvent("localeChanged")
-    );
-}
-
-function createLanguageSwitcher() {
-
-    let switcher =
-        document.getElementById(
-            "language-switcher"
-        );
-
-    if (!switcher) {
-        return;
-    }
-
-    switcher.innerHTML = "";
-
-    const englishButton =
-        document.createElement("button");
-
-    englishButton.type = "button";
-    englishButton.className =
-        "language-button";
-
-    englishButton.textContent = "EN";
-
-    englishButton.classList.toggle(
-        "active",
-        currentLocale === "en"
-    );
-
-    englishButton.addEventListener(
-        "click",
-        () => setLocale("en")
-    );
-
-    const russianButton =
-        document.createElement("button");
-
-    russianButton.type = "button";
-    russianButton.className =
-        "language-button";
-
-    russianButton.textContent = "RU";
-
-    russianButton.classList.toggle(
-        "active",
-        currentLocale === "ru"
-    );
-
-    russianButton.addEventListener(
-        "click",
-        () => setLocale("ru")
-    );
-
-    switcher.appendChild(
-        englishButton
-    );
-
-    switcher.appendChild(
-        russianButton
-    );
 }

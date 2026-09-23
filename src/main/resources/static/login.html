@@ -2,133 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Wall</title>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+    <title>Social Wall — Login</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-<header class="navbar">
-    <div class="navbar-content">
+<div class="auth-container">
 
-        <a class="logo" href="/index.html">
-            Social Wall
-        </a>
+    <div class="auth-card">
 
-        <nav>
+        <div class="auth-header">
 
-            <a
-                    href="/index.html"
-                    data-i18n="navigation.publicWall"
-            >
-                Public wall
-            </a>
-
-            <a
-                    href="/my-wall.html"
-                    data-i18n="navigation.myWall"
-            >
-                My wall
-            </a>
+            <h1>Social Wall</h1>
 
             <div
                     id="language-switcher"
                     class="language-switcher"
             ></div>
 
-            <button
-                    id="logout-button"
-                    class="button-secondary"
-                    data-i18n="navigation.logout"
-            >
-                Log out
-            </button>
+        </div>
 
-        </nav>
-
-    </div>
-</header>
-
-<main class="page-container">
-
-    <section class="welcome-section">
-
-        <h1 data-i18n="publicWall.title">
-            Public wall
-        </h1>
-
-        <p data-i18n="publicWall.description">
-            Posts from all users.
-        </p>
-
-    </section>
-
-    <section class="create-post-card">
-
-        <h2 data-i18n="post.createTitle">
-            Create post
+        <h2 data-i18n="auth.loginTitle">
+            Log in
         </h2>
 
-        <form id="post-form">
-
-      <textarea
-              id="post-content"
-              name="content"
-              rows="4"
-              maxlength="5000"
-              data-i18n-placeholder="post.placeholder"
-              placeholder="What's on your mind?"
-      ></textarea>
+        <form id="login-form">
 
             <label
-                    for="post-image"
-                    class="file-label"
-                    data-i18n="post.addImage"
+                    for="username"
+                    data-i18n="auth.username"
             >
-                Add image
+                Username
             </label>
 
             <input
-                    id="post-image"
-                    name="image"
-                    type="file"
-                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
             >
 
-            <p
-                    class="file-hint"
-                    data-i18n="post.imageHint"
+            <label
+                    for="password"
+                    data-i18n="auth.password"
             >
-                Optional. JPEG, PNG, GIF or WebP. Maximum 5 MB.
-            </p>
+                Password
+            </label>
+
+            <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+            >
 
             <button
                     type="submit"
-                    data-i18n="post.publish"
+                    data-i18n="auth.login"
             >
-                Publish
+                Log in
             </button>
 
         </form>
 
         <p
-                id="post-message"
+                id="message"
                 class="message"
         ></p>
 
-    </section>
+        <p class="auth-link">
 
-    <section>
-        <div
-                id="posts-container"
-                class="posts-container"
-        ></div>
-    </section>
+            <span data-i18n="auth.noAccount">
+                Don't have an account?
+            </span>
 
-</main>
+            <a
+                    href="/register.html"
+                    data-i18n="auth.registerLink"
+            >
+                Register
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
 
 <script src="/js/localization.js"></script>
-<script src="/js/posts.js"></script>
+<script src="/js/auth.js"></script>
 
 </body>
 </html>

@@ -49,10 +49,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            MessageSource messageSource
+            MessageSource messageSource,
+            SecurityContextRepository securityContextRepository
     ) throws Exception {
 
         http
+                .securityContext(securityContext ->
+                        securityContext
+                                .securityContextRepository(
+                                        securityContextRepository
+                                )
+                )
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/",
@@ -76,6 +84,9 @@ public class SecurityConfig {
 
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                         .logoutSuccessHandler(
                                 (request, response, authentication) ->
                                         response.setStatus(204)
