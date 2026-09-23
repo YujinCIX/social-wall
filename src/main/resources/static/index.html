@@ -10,39 +10,81 @@
 
 <header class="navbar">
   <div class="navbar-content">
-    <a class="logo" href="/index.html">Social Wall</a>
+
+    <a class="logo" href="/index.html">
+      Social Wall
+    </a>
 
     <nav>
-      <a href="/index.html">Public wall</a>
-      <a href="/my-wall.html">My wall</a>
-      <button id="logout-button" class="button-secondary">
+
+      <a
+              href="/index.html"
+              data-i18n="navigation.publicWall"
+      >
+        Public wall
+      </a>
+
+      <a
+              href="/my-wall.html"
+              data-i18n="navigation.myWall"
+      >
+        My wall
+      </a>
+
+      <div
+              id="language-switcher"
+              class="language-switcher"
+      ></div>
+
+      <button
+              id="logout-button"
+              class="button-secondary"
+              data-i18n="navigation.logout"
+      >
         Log out
       </button>
+
     </nav>
+
   </div>
 </header>
 
 <main class="page-container">
 
   <section class="welcome-section">
-    <h1>Public wall</h1>
-    <p>Posts from all users.</p>
+
+    <h1 data-i18n="publicWall.title">
+      Public wall
+    </h1>
+
+    <p data-i18n="publicWall.description">
+      Posts from all users.
+    </p>
+
   </section>
 
   <section class="create-post-card">
-    <h2>Create post</h2>
+
+    <h2 data-i18n="post.createTitle">
+      Create post
+    </h2>
 
     <form id="post-form">
 
-            <textarea
-                    id="post-content"
-                    name="content"
-                    rows="4"
-                    maxlength="5000"
-                    placeholder="What's on your mind?"
-            ></textarea>
+      <textarea
+              id="post-content"
+              name="content"
+              rows="4"
+              maxlength="5000"
+              data-i18n-placeholder="post.placeholder"
+              placeholder="What's on your mind?"
+      ></textarea>
 
-      <label for="post-image" class="file-label">
+      <label
+              for="post-image"
+              class="file-label"
+              data-i18n="post.addImage"
+      >
         Add image
       </label>
 
@@ -53,25 +95,40 @@
               accept="image/jpeg,image/png,image/gif,image/webp"
       >
 
-      <p class="file-hint">
+      <p
+              class="file-hint"
+              data-i18n="post.imageHint"
+      >
         Optional. JPEG, PNG, GIF or WebP. Maximum 5 MB.
       </p>
 
-      <button type="submit">
+      <button
+              type="submit"
+              data-i18n="post.publish"
+      >
         Publish
       </button>
 
     </form>
 
-    <p id="post-message" class="message"></p>
+    <p
+            id="post-message"
+            class="message"
+    ></p>
+
   </section>
 
   <section>
-    <div id="posts-container" class="posts-container"></div>
+    <div
+            id="posts-container"
+            class="posts-container"
+    ></div>
   </section>
 
 </main>
 
+<script src="/js/localization.js"></script>
 <script src="/js/posts.js"></script>
+
 </body>
 </html>

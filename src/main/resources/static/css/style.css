@@ -49,6 +49,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 nav a {
@@ -91,6 +92,13 @@ nav a:hover {
     padding: 30px;
     border: 1px solid #ddd;
     border-radius: 10px;
+}
+
+.auth-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
 }
 
 .auth-card h1 {
@@ -141,10 +149,30 @@ button:hover {
     padding: 8px 12px;
 }
 
+.language-switcher {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.language-button {
+    background: #eeeeee;
+    color: #222;
+    padding: 6px 9px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+}
+
+.language-button.active {
+    background: #222;
+    color: #ffffff;
+}
+
 .auth-link {
     margin-bottom: 0;
     margin-top: 20px;
     color: #666;
+    overflow-wrap: anywhere;
 }
 
 .auth-link a {
@@ -155,6 +183,7 @@ button:hover {
 .message {
     min-height: 20px;
     margin-bottom: 0;
+    overflow-wrap: anywhere;
 }
 
 .create-post-card {
@@ -177,6 +206,7 @@ button:hover {
     margin-top: 0;
     color: #777;
     font-size: 13px;
+    overflow-wrap: anywhere;
 }
 
 .posts-container {
@@ -190,6 +220,7 @@ button:hover {
     border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
+    min-width: 0;
 }
 
 .post-header {
@@ -201,11 +232,13 @@ button:hover {
 
 .post-author {
     font-weight: bold;
+    overflow-wrap: anywhere;
 }
 
 .post-date {
     color: #777;
     font-size: 13px;
+    white-space: nowrap;
 }
 
 .post-content {
@@ -246,6 +279,7 @@ button:hover {
     nav {
         width: 100%;
         flex-wrap: wrap;
+        gap: 10px;
     }
 
     .page-container {
@@ -256,5 +290,13 @@ button:hover {
     .post-header {
         flex-direction: column;
         gap: 5px;
+    }
+
+    .post-date {
+        white-space: normal;
+    }
+
+    .auth-header {
+        align-items: flex-start;
     }
 }
