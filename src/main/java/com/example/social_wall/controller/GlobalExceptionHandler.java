@@ -1,5 +1,7 @@
 package com.example.social_wall.controller;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,6 +16,12 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final MessageSource messageSource;
+
+    public GlobalExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgument(
@@ -33,7 +41,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of(
                         "message",
-                        "Invalid username or password"
+                        getMessage("auth.invalid.credentials")
                 ));
     }
 
@@ -48,7 +56,10 @@ public class GlobalExceptionHandler {
                 .forEach(error ->
                         errors.put(
                                 error.getField(),
-                                error.getDefaultMessage()
+                                messageSource.getMessage(
+                                        error,
+                                        LocaleContextHolder.getLocale()
+                                )
                         )
                 );
 
@@ -63,7 +74,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of(
                         "message",
-                        "Uploaded file is too large"
+                        getMessage("post.uploadTooLarge")
                 ));
     }
 
@@ -73,7 +84,15 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
                         "message",
-                        "Failed to save uploaded file"
+                        getMessage("post.uploadFailed")
                 ));
+    }
+
+    private String getMessage(String key) {
+        return messageSource.getMessage(
+                key,
+                null,
+                LocaleContextHolder.getLocale()
+        );
     }
 }

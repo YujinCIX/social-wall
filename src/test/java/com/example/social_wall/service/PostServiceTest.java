@@ -6,6 +6,8 @@ import com.example.social_wall.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mockito;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
@@ -27,10 +29,14 @@ class PostServiceTest {
         UserRepository userRepository =
                 Mockito.mock(UserRepository.class);
 
+        MessageSource messageSource =
+                createMessageSource();
+
         PostService postService =
                 new PostService(
                         postRepository,
                         userRepository,
+                        messageSource,
                         tempDirectory.toString()
                 );
 
@@ -53,6 +59,9 @@ class PostServiceTest {
         UserRepository userRepository =
                 Mockito.mock(UserRepository.class);
 
+        MessageSource messageSource =
+                createMessageSource();
+
         User user =
                 new User(
                         "testuser",
@@ -68,6 +77,7 @@ class PostServiceTest {
                 new PostService(
                         postRepository,
                         userRepository,
+                        messageSource,
                         tempDirectory.toString()
                 );
 
@@ -88,5 +98,16 @@ class PostServiceTest {
                         image
                 )
         );
+    }
+
+    private MessageSource createMessageSource() {
+
+        ResourceBundleMessageSource messageSource =
+                new ResourceBundleMessageSource();
+
+        messageSource.setBasenames("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+
+        return messageSource;
     }
 }

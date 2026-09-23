@@ -1,6 +1,7 @@
 package com.example.social_wall.config;
 
 import com.example.social_wall.service.CustomUserDetailsService;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,7 +48,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(
-            HttpSecurity http
+            HttpSecurity http,
+            MessageSource messageSource
     ) throws Exception {
 
         http
@@ -60,6 +62,7 @@ public class SecurityConfig {
                                 "/my-wall.html",
                                 "/css/**",
                                 "/js/**",
+                                "/locales/**",
                                 "/uploads/**",
                                 "/api/auth/register",
                                 "/api/auth/login"
@@ -86,9 +89,19 @@ public class SecurityConfig {
                                     response.setContentType(
                                             "application/json"
                                     );
+                                    response.setCharacterEncoding("UTF-8");
+
+                                    String message =
+                                            messageSource.getMessage(
+                                                    "auth.required",
+                                                    null,
+                                                    request.getLocale()
+                                            );
 
                                     response.getWriter().write(
-                                            "{\"message\":\"Authentication required\"}"
+                                            "{\"message\":\"" +
+                                                    message +
+                                                    "\"}"
                                     );
                                 }
                         )
