@@ -1,132 +1,239 @@
-const registerForm = document.getElementById("register-form");
-const loginForm = document.getElementById("login-form");
-const messageElement = document.getElementById("message");
+const registerForm =
+    document.getElementById(
+        "register-form"
+    );
 
-if (registerForm) {
-    registerForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
+const loginForm =
+    document.getElementById(
+        "login-form"
+    );
 
-        const username =
-            document.getElementById("username").value.trim();
+const messageElement =
+    document.getElementById(
+        "message"
+    );
 
-        const email =
-            document.getElementById("email").value.trim();
+window.localizationReady.then(
+    () => {
 
-        const password =
-            document.getElementById("password").value;
-
-        showMessage("", false);
-
-        try {
-            const response = await fetch("/api/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username,
-                    email,
-                    password
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                showMessage(
-                    getErrorMessage(data),
-                    true
-                );
-                return;
-            }
-
-            showMessage(
-                "Registration successful. Redirecting to login...",
-                false
-            );
-
-            setTimeout(() => {
-                window.location.href = "/login.html";
-            }, 800);
-
-        } catch (error) {
-            showMessage(
-                "Unable to connect to the server.",
-                true
+        if (registerForm) {
+            registerForm.addEventListener(
+                "submit",
+                register
             );
         }
-    });
-}
 
-if (loginForm) {
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const username =
-            document.getElementById("username").value.trim();
-
-        const password =
-            document.getElementById("password").value;
-
-        showMessage("", false);
-
-        try {
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username,
-                    password
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                showMessage(
-                    getErrorMessage(data),
-                    true
-                );
-                return;
-            }
-
-            window.location.href = "/index.html";
-
-        } catch (error) {
-            showMessage(
-                "Unable to connect to the server.",
-                true
+        if (loginForm) {
+            loginForm.addEventListener(
+                "submit",
+                login
             );
         }
-    });
+    }
+);
+
+async function register(event) {
+
+    event.preventDefault();
+
+    const username =
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
+    const email =
+        document
+            .getElementById("email")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("password")
+            .value;
+
+    showMessage("", false);
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/auth/register",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers:
+                        getLocalizedFetchHeaders({
+                            "Content-Type":
+                                "application/json"
+                        }),
+                    body: JSON.stringify({
+                        username,
+                        email,
+                        password
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            showMessage(
+                getErrorMessage(data),
+                true
+            );
+
+            return;
+        }
+
+        showMessage(
+            getTranslation(
+                "auth.registrationSuccess"
+            ),
+            false
+        );
+
+        setTimeout(
+            () => {
+                window.location.replace(
+                    "/login.html"
+                );
+            },
+            800
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            getTranslation(
+                "error.server"
+            ),
+            true
+        );
+    }
 }
 
-function showMessage(message, isError) {
+async function login(event) {
+
+    event.preventDefault();
+
+    const username =
+        document
+            .getElementById("username")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("password")
+            .value;
+
+    showMessage("", false);
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/auth/login",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers:
+                        getLocalizedFetchHeaders({
+                            "Content-Type":
+                                "application/json"
+                        }),
+                    body: JSON.stringify({
+                        username,
+                        password
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            showMessage(
+                getErrorMessage(data),
+                true
+            );
+
+            return;
+        }
+
+        window.location.replace(
+            "/index.html"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            getTranslation(
+                "error.server"
+            ),
+            true
+        );
+    }
+}
+
+function showMessage(
+    message,
+    isError
+) {
 
     if (!messageElement) {
         return;
     }
 
-    messageElement.textContent = message;
+    messageElement.textContent =
+        message;
 
-    messageElement.className = "message";
+    messageElement.className =
+        "message";
 
     if (isError) {
-        messageElement.classList.add("error-message");
+
+        messageElement.classList.add(
+            "error-message"
+        );
+
     } else if (message) {
-        messageElement.classList.add("success-message");
+
+        messageElement.classList.add(
+            "success-message"
+        );
     }
 }
 
 function getErrorMessage(data) {
 
     if (data.message) {
-        return data.message;
+
+        return translateBackendMessage(
+            data.message
+        );
     }
 
-    const firstError = Object.values(data)[0];
+    const firstError =
+        Object.values(data)[0];
 
-    return firstError || "Request failed.";
+    if (firstError) {
+
+        return translateBackendMessage(
+            firstError
+        );
+    }
+
+    return getTranslation(
+        "error.requestFailed"
+    );
 }

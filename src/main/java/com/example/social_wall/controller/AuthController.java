@@ -6,6 +6,8 @@ import com.example.social_wall.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,15 +26,18 @@ public class AuthController {
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
+    private final MessageSource messageSource;
 
     public AuthController(
             AuthService authService,
             AuthenticationManager authenticationManager,
-            SecurityContextRepository securityContextRepository
+            SecurityContextRepository securityContextRepository,
+            MessageSource messageSource
     ) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
+        this.messageSource = messageSource;
     }
 
     @PostMapping("/register")
@@ -42,7 +47,10 @@ public class AuthController {
         authService.register(request);
 
         return ResponseEntity.ok(
-                Map.of("message", "User registered successfully")
+                Map.of(
+                        "message",
+                        getMessage("auth.registration.success")
+                )
         );
     }
 
@@ -76,9 +84,19 @@ public class AuthController {
 
         return ResponseEntity.ok(
                 Map.of(
-                        "message", "Login successful",
-                        "username", authentication.getName()
+                        "message",
+                        getMessage("auth.login.success"),
+                        "username",
+                        authentication.getName()
                 )
+        );
+    }
+
+    private String getMessage(String key) {
+        return messageSource.getMessage(
+                key,
+                null,
+                LocaleContextHolder.getLocale()
         );
     }
 }

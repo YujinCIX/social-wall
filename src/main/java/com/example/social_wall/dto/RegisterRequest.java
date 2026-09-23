@@ -6,27 +6,27 @@ import jakarta.validation.constraints.Size;
 
 public class RegisterRequest {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = "{validation.username.required}")
     @Size(
             min = 3,
             max = 50,
-            message = "Username must contain 3-50 characters"
+            message = "{validation.username.length}"
     )
     private String username;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
+    @NotBlank(message = "{validation.email.required}")
+    @Email(message = "{validation.email.format}")
     @Size(
             max = 255,
-            message = "Email is too long"
+            message = "{validation.email.tooLong}"
     )
     private String email;
 
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "{validation.password.required}")
     @Size(
             min = 8,
             max = 100,
-            message = "Password must contain 8-100 characters"
+            message = "{validation.password.length}"
     )
     private String password;
 

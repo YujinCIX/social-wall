@@ -2,39 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+  >
   <title>Social Wall — My Wall</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <header class="navbar">
+
   <div class="navbar-content">
-    <a class="logo" href="/index.html">Social Wall</a>
+
+    <a
+            class="logo"
+            href="/index.html"
+    >
+      Social Wall
+    </a>
 
     <nav>
-      <a href="/index.html">Public wall</a>
-      <a href="/my-wall.html">My wall</a>
-      <button id="logout-button" class="button-secondary">
+
+      <a
+              href="/index.html"
+              data-i18n="navigation.publicWall"
+      >
+        Public wall
+      </a>
+
+      <a
+              href="/my-wall.html"
+              data-i18n="navigation.myWall"
+      >
+        My wall
+      </a>
+
+      <div
+              id="language-switcher"
+              class="language-switcher"
+      ></div>
+
+      <button
+              id="logout-button"
+              class="button-secondary"
+              data-i18n="navigation.logout"
+      >
         Log out
       </button>
+
     </nav>
+
   </div>
+
 </header>
 
 <main class="page-container">
 
   <section class="welcome-section">
-    <h1>My wall</h1>
-    <p>Your published posts.</p>
+
+    <h1 data-i18n="myWall.title">
+      My wall
+    </h1>
+
+    <p data-i18n="myWall.description">
+      Your published posts.
+    </p>
+
   </section>
 
   <section>
-    <div id="posts-container" class="posts-container"></div>
+
+    <div
+            id="posts-container"
+            class="posts-container"
+    ></div>
+
   </section>
 
 </main>
 
+<script src="/js/localization.js"></script>
 <script src="/js/posts.js"></script>
+
 </body>
 </html>

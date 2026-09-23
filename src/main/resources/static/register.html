@@ -2,20 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
     <title>Social Wall — Register</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="auth-container">
+
     <div class="auth-card">
-        <h1>Social Wall</h1>
-        <h2>Create account</h2>
+
+        <div class="auth-header">
+
+            <h1>Social Wall</h1>
+
+            <div
+                    id="language-switcher"
+                    class="language-switcher"
+            ></div>
+
+        </div>
+
+        <h2 data-i18n="auth.registerTitle">
+            Create account
+        </h2>
 
         <form id="register-form">
 
-            <label for="username">Username</label>
+            <label
+                    for="username"
+                    data-i18n="auth.username"
+            >
+                Username
+            </label>
+
             <input
                     id="username"
                     name="username"
@@ -25,7 +48,13 @@
                     required
             >
 
-            <label for="email">Email</label>
+            <label
+                    for="email"
+                    data-i18n="auth.email"
+            >
+                Email
+            </label>
+
             <input
                     id="email"
                     name="email"
@@ -34,7 +63,13 @@
                     required
             >
 
-            <label for="password">Password</label>
+            <label
+                    for="password"
+                    data-i18n="auth.password"
+            >
+                Password
+            </label>
+
             <input
                     id="password"
                     name="password"
@@ -44,19 +79,41 @@
                     required
             >
 
-            <button type="submit">Register</button>
+            <button
+                    type="submit"
+                    data-i18n="auth.register"
+            >
+                Register
+            </button>
 
         </form>
 
-        <p id="message" class="message"></p>
+        <p
+                id="message"
+                class="message"
+        ></p>
 
         <p class="auth-link">
-            Already have an account?
-            <a href="/login.html">Log in</a>
+
+            <span data-i18n="auth.hasAccount">
+                Already have an account?
+            </span>
+
+            <a
+                    href="/login.html"
+                    data-i18n="auth.loginLink"
+            >
+                Log in
+            </a>
+
         </p>
+
     </div>
+
 </div>
 
+<script src="/js/localization.js"></script>
 <script src="/js/auth.js"></script>
+
 </body>
 </html>

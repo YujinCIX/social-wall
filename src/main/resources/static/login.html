@@ -2,20 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
     <title>Social Wall — Login</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="auth-container">
+
     <div class="auth-card">
-        <h1>Social Wall</h1>
-        <h2>Log in</h2>
+
+        <div class="auth-header">
+
+            <h1>Social Wall</h1>
+
+            <div
+                    id="language-switcher"
+                    class="language-switcher"
+            ></div>
+
+        </div>
+
+        <h2 data-i18n="auth.loginTitle">
+            Log in
+        </h2>
 
         <form id="login-form">
 
-            <label for="username">Username</label>
+            <label
+                    for="username"
+                    data-i18n="auth.username"
+            >
+                Username
+            </label>
+
             <input
                     id="username"
                     name="username"
@@ -23,7 +46,13 @@
                     required
             >
 
-            <label for="password">Password</label>
+            <label
+                    for="password"
+                    data-i18n="auth.password"
+            >
+                Password
+            </label>
+
             <input
                     id="password"
                     name="password"
@@ -31,19 +60,41 @@
                     required
             >
 
-            <button type="submit">Log in</button>
+            <button
+                    type="submit"
+                    data-i18n="auth.login"
+            >
+                Log in
+            </button>
 
         </form>
 
-        <p id="message" class="message"></p>
+        <p
+                id="message"
+                class="message"
+        ></p>
 
         <p class="auth-link">
-            Don't have an account?
-            <a href="/register.html">Register</a>
+
+            <span data-i18n="auth.noAccount">
+                Don't have an account?
+            </span>
+
+            <a
+                    href="/register.html"
+                    data-i18n="auth.registerLink"
+            >
+                Register
+            </a>
+
         </p>
+
     </div>
+
 </div>
 
+<script src="/js/localization.js"></script>
 <script src="/js/auth.js"></script>
+
 </body>
 </html>
