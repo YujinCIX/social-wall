@@ -1,0 +1,65 @@
+{
+  "navigation": {
+    "publicWall": "Public wall",
+    "myWall": "My wall",
+    "logout": "Log out"
+  },
+  "language": {
+    "english": "English",
+    "russian": "Russian"
+  },
+  "publicWall": {
+    "title": "Public wall",
+    "description": "Posts from all users."
+  },
+  "myWall": {
+    "title": "My wall",
+    "description": "Your published posts."
+  },
+  "post": {
+    "createTitle": "Create post",
+    "placeholder": "What's on your mind?",
+    "addImage": "Add image",
+    "imageHint": "Optional. JPEG, PNG, GIF or WebP. Maximum 5 MB.",
+    "publish": "Publish",
+    "published": "Post published.",
+    "empty": "No posts yet.",
+    "postImage": "Post image"
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create account",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "register": "Register",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "registerLink": "Register",
+    "loginLink": "Log in",
+    "registrationSuccess": "Registration successful. Redirecting to login..."
+  },
+  "error": {
+    "server": "Unable to connect to the server.",
+    "requestFailed": "Request failed.",
+    "invalidCredentials": "Invalid username or password",
+    "usernameExists": "Username already exists",
+    "emailExists": "Email already exists",
+    "usernameRequired": "Username is required",
+    "usernameLength": "Username must contain 3-50 characters",
+    "emailRequired": "Email is required",
+    "emailFormat": "Invalid email format",
+    "emailTooLong": "Email is too long",
+    "passwordRequired": "Password is required",
+    "passwordLength": "Password must contain 8-100 characters",
+    "loadPosts": "Unable to load posts.",
+    "createPost": "Failed to create post.",
+    "postContent": "Post must contain text or an image.",
+    "imageSize": "Image size must not exceed 5 MB.",
+    "imageType": "Only JPEG, PNG, GIF and WebP images are allowed",
+    "userNotFound": "User not found",
+    "upload": "Failed to save uploaded file",
+    "uploadTooLarge": "Uploaded file is too large"
+  }
+}
